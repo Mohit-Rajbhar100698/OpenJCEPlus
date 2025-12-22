@@ -19,14 +19,13 @@ import org.junit.jupiter.params.provider.Arguments;
 public class TestArguments {
 
     /**
-     * Generates combinations of all aes key sizes and OpenJCEPlus* providers under test.
+     * Generates combinations of all key sizes and OpenJCEPlus* providers under test.
      * 
      * If no tags are found, all variations are returned.
      *
      * @return Stream of Arguments containing key sizes and OpenJCEPlus* providers
      */
-    public static Stream<Arguments> aesKeySizesAndJCEPlusProviders() {
-        int[] keySizes = {128, 192, 256};
+    public static Stream<Arguments> keySizesAndJCEPlusProviders(int[] keySizes) {
 
         // Get active provider tags from -Dgroups system property
         String[] groupPropertyTags = BaseTest.getTagsPropertyAsArray();
@@ -59,4 +58,17 @@ public class TestArguments {
         }
         return arguments.stream();
     }
+
+    //Generates test combinations for each AES key size with the active OpenJCEPlus* providers.
+    public static Stream<Arguments> aesKeySizesAndJCEPlusProviders() {
+        int[] aesKeySizesOpenJcePlus = {128, 192, 256};
+        return keySizesAndJCEPlusProviders(aesKeySizesOpenJcePlus);
+    }
+
+    //Generates test combinations for each AES GCM key size with the active OpenJCEPlus* providers.
+    public static Stream<Arguments> aesgcmKeySizesAndJCEPlusProviders() {
+        int[] aesgcmKeySizesOpenJcePlus = {128, 192, 256};
+        return keySizesAndJCEPlusProviders(aesgcmKeySizesOpenJcePlus);
+    }    
+    
 }
