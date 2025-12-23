@@ -19,6 +19,54 @@ import org.junit.jupiter.params.provider.Arguments;
 public class TestArguments {
 
     /**
+     * Generates test combinations for each AES key size with the active OpenJCEPlus* providers.
+     * 
+     * @return Stream of Arguments containing AES key sizes and OpenJCEPlus* providers
+     */ 
+    public static Stream<Arguments> aesKeySizesAndJCEPlusProviders() {
+        int[] aesKeySizesOpenJcePlus = {128, 192, 256};
+        return keySizesAndJCEPlusProviders(aesKeySizesOpenJcePlus);
+    }
+
+    /**     
+     * Generates test combinations for each AESGCM key size with the active OpenJCEPlus* providers.
+     * 
+     * @return Stream of Arguments containing AESGCM key sizes and OpenJCEPlus* providers
+     */
+    public static Stream<Arguments> aesgcmKeySizesAndJCEPlusProviders() {
+        int[] aesgcmKeySizesOpenJcePlus = {128, 192, 256};
+        return keySizesAndJCEPlusProviders(aesgcmKeySizesOpenJcePlus);
+    }
+
+    /**
+     * Provides enabled OpenJCEPlus* providers for alias tests
+     *
+     * @return A stream of enabled TestProvider.
+     */
+    public static Stream<TestProvider> testAliasesJCEPlusProviders() {
+        List<TestProvider> testAliasesActiveProviders = getEnabledProviders();
+
+        if (testAliasesActiveProviders.isEmpty()) {
+            throw new IllegalArgumentException("No test providers found, unlikely this is what was asked for.");
+        }
+        return testAliasesActiveProviders.stream();
+    }
+
+    /**
+     * Provides enabled OpenJCEPlus* providers for AESGCMCICOWithGCM tests
+     *
+     * @return A stream of enabled TestProvider.
+     */
+    public static Stream<TestProvider> aesGcmCicoWithGcmJCEPlusProviders() {
+        List<TestProvider> aesGcmCicoWithGcmActiveProviders = getEnabledProviders();
+
+        if (aesGcmCicoWithGcmActiveProviders.isEmpty()) {
+            throw new IllegalArgumentException("No test providers found, unlikely this is what was asked for.");
+        }
+        return aesGcmCicoWithGcmActiveProviders.stream();
+    }
+
+    /**
      * Generates combinations of all key sizes and OpenJCEPlus* providers under test.
      * 
      * If no tags are found, all variations are returned.
@@ -69,40 +117,6 @@ public class TestArguments {
             }
         }
         return enabledProviders;
-    }    
-    
-    /**
-     * Provides enabled OpenJCEPlus* providers for alias tests
-     *
-     * @return A stream of enabled TestProvider.
-     */
-    public static Stream<TestProvider> testAliasesJCEPlusProviders() {
-        List<TestProvider> testAliasesActiveProviders = getEnabledProviders();
-
-        if (testAliasesActiveProviders.isEmpty()) {
-            throw new IllegalArgumentException("No test providers found, unlikely this is what was asked for.");
-        }
-        return testAliasesActiveProviders.stream();
-    }
-
-    /**
-     * Generates test combinations for each AES key size with the active OpenJCEPlus* providers.
-     * 
-     * @return Stream of Arguments containing AES key sizes and OpenJCEPlus* providers
-     */ 
-    public static Stream<Arguments> aesKeySizesAndJCEPlusProviders() {
-        int[] aesKeySizesOpenJcePlus = {128, 192, 256};
-        return keySizesAndJCEPlusProviders(aesKeySizesOpenJcePlus);
-    }
-
-    /**     
-     * Generates test combinations for each AES-GCM key size with the active OpenJCEPlus* providers.
-     * 
-     * @return Stream of Arguments containing AES-GCM key sizes and OpenJCEPlus* providers
-     */
-    public static Stream<Arguments> aesgcmKeySizesAndJCEPlusProviders() {
-        int[] aesgcmKeySizesOpenJcePlus = {128, 192, 256};
-        return keySizesAndJCEPlusProviders(aesgcmKeySizesOpenJcePlus);
-    }    
+    }        
     
 }
