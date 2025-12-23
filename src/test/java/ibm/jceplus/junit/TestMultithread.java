@@ -40,7 +40,6 @@ public class TestMultithread {
             "ibm.jceplus.junit.openjceplus.multithread.TestAESGCMSameBuffer",
             "ibm.jceplus.junit.openjceplus.multithread.TestAESGCMUpdate",
             "ibm.jceplus.junit.openjceplus.multithread.TestAESGCMWithByteBuffer",
-            "ibm.jceplus.junit.openjceplus.multithread.TestAliases",
             "ibm.jceplus.junit.openjceplus.multithread.TestDESede",
             "ibm.jceplus.junit.openjceplus.multithread.TestDH",
             "ibm.jceplus.junit.openjceplus.multithread.TestDSAKey",

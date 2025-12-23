@@ -30,7 +30,6 @@ import org.junit.platform.suite.api.Suite;
     TestAESGCMUpdate.class,
     TestAESGCMWithByteBuffer.class,
     TestAESKeyWrap.class,
-    TestAliases.class,
     TestAttributes.class,
     TestDeterministic.class,
     TestDH.class,

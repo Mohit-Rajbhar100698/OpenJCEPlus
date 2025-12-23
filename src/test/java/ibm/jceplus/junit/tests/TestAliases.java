@@ -1,43 +1,61 @@
 /*
- * Copyright IBM Corp. 2023, 2024
+ * Copyright IBM Corp. 2025
  *
  * This code is free software; you can redistribute it and/or modify it
  * under the terms provided by IBM in the LICENSE file that accompanied
  * this code, including the "Classpath" Exception described therein.
  */
 
-package ibm.jceplus.junit.openjceplus.multithread;
+package ibm.jceplus.junit.tests;
 
-import ibm.jceplus.junit.base.BaseTestJunit5;
-import ibm.jceplus.junit.openjceplus.Utils;
 import java.security.AlgorithmParameterGenerator;
 import java.security.AlgorithmParameters;
 import java.security.KeyFactory;
 import java.security.KeyPairGenerator;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.Signature;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.Mac;
 import javax.crypto.SecretKeyFactory;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.junit.jupiter.params.Parameter;
+import org.junit.jupiter.params.ParameterizedClass;
+import org.junit.jupiter.params.provider.MethodSource;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@TestInstance(Lifecycle.PER_CLASS)
-public class TestAliases extends BaseTestJunit5 {
+@Tag(TestProvider.OPENJCEPLUS_NAME)
+@Tag(TestProvider.OPENJCEPLUS_FIPS_NAME)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@ParameterizedClass
+@MethodSource("ibm.jceplus.junit.tests.TestArguments#testAliasesJCEPlusProviders")
+public class TestAliases extends BaseTest {
 
-    @BeforeAll
-    public void setUp() {
-        Utils.loadProviderTestSuite();
-        setProviderName(Utils.TEST_SUITE_PROVIDER_NAME);
+    @Parameter(0)
+    TestProvider provider;
+
+    @BeforeEach
+    public void setUp() throws Exception {
+        setAndInsertProvider(provider);
     }
 
     @Test
     public void testAlgParams_3DES() throws Exception {
-        AlgorithmParameters.getInstance("3DES", getProviderName());
+        try {
+            AlgorithmParameters.getInstance("3DES", getProviderName());
+        } catch (NoSuchAlgorithmException nsae) {
+            if (getProviderName().equals("OpenJCEPlusFIPS")) {
+                assertEquals("no such algorithm: 3DES for provider OpenJCEPlusFIPS", nsae.getMessage());
+                return;
+            } else {
+                throw nsae;
+            }
+        }
     }
 
     @Test
@@ -52,7 +70,16 @@ public class TestAliases extends BaseTestJunit5 {
 
     @Test
     public void testCipher_3DES() throws Exception {
-        Cipher.getInstance("3DES", getProviderName());
+        try {
+            Cipher.getInstance("3DES", getProviderName());
+        } catch (NoSuchAlgorithmException nsae) {
+            if (getProviderName().equals("OpenJCEPlusFIPS")) {
+                assertEquals("No such algorithm: 3DES", nsae.getMessage());
+                return;
+            } else {
+                throw nsae;
+            }
+        }
     }
 
     @Test
@@ -62,12 +89,30 @@ public class TestAliases extends BaseTestJunit5 {
 
     @Test
     public void testKeyGen_3DES() throws Exception {
-        KeyGenerator.getInstance("3DES", getProviderName());
+        try {
+            KeyGenerator.getInstance("3DES", getProviderName());
+        } catch (NoSuchAlgorithmException nsae) {
+            if (getProviderName().equals("OpenJCEPlusFIPS")) {
+                assertEquals("no such algorithm: 3DES for provider OpenJCEPlusFIPS", nsae.getMessage());
+                return;
+            } else {
+                throw nsae;
+            }
+        }
     }
 
     @Test
     public void testKeyGen_HMACwithSHA1() throws Exception {
-        KeyGenerator.getInstance("HMACwithSHA1", getProviderName());
+        try {
+            KeyGenerator.getInstance("HMACwithSHA1", getProviderName());
+        } catch (NoSuchAlgorithmException nsae) {
+            if (getProviderName().equals("OpenJCEPlusFIPS")) {
+                assertEquals("no such algorithm: HMACwithSHA1 for provider OpenJCEPlusFIPS", nsae.getMessage());
+                return;
+            } else {
+                throw nsae;
+            }
+        }
     }
 
     @Test
@@ -92,7 +137,16 @@ public class TestAliases extends BaseTestJunit5 {
 
     @Test
     public void testKeyPairGen_OID_1_3_14_3_2_12() throws Exception {
-        KeyPairGenerator.getInstance("OID.1.3.14.3.2.12", getProviderName());
+        try {
+            KeyPairGenerator.getInstance("OID.1.3.14.3.2.12", getProviderName());
+        } catch (NoSuchAlgorithmException nsae) {
+            if (getProviderName().equals("OpenJCEPlusFIPS")) {
+                assertEquals("no such algorithm: OID.1.3.14.3.2.12 for provider OpenJCEPlusFIPS", nsae.getMessage());
+                return;
+            } else {
+                throw nsae;
+            }
+        }
     }
 
     //public void testKeyStore_PKCS12KS() throws Exception {
@@ -101,7 +155,16 @@ public class TestAliases extends BaseTestJunit5 {
 
     @Test
     public void testMac_HMACwithSHA1() throws Exception {
-        Mac.getInstance("HMACwithSHA1", getProviderName());
+        try {
+            Mac.getInstance("HMACwithSHA1", getProviderName());
+        } catch (NoSuchAlgorithmException nsae) {
+            if (getProviderName().equals("OpenJCEPlusFIPS")) {
+                assertEquals("no such algorithm: HMACwithSHA1 for provider OpenJCEPlusFIPS", nsae.getMessage());
+                return;
+            } else {
+                throw nsae;
+            }
+        }
     }
 
     @Test
@@ -176,7 +239,16 @@ public class TestAliases extends BaseTestJunit5 {
 
     @Test
     public void testSecretKeyFactory_3DES() throws Exception {
-        SecretKeyFactory.getInstance("3DES", getProviderName());
+        try {
+            SecretKeyFactory.getInstance("3DES", getProviderName());
+        } catch (NoSuchAlgorithmException nsae) {
+            if (getProviderName().equals("OpenJCEPlusFIPS")) {
+                assertEquals("no such algorithm: 3DES for provider OpenJCEPlusFIPS", nsae.getMessage());
+                return;
+            } else {
+                throw nsae;
+            }
+        }
     }
 
     @Test
@@ -191,47 +263,128 @@ public class TestAliases extends BaseTestJunit5 {
 
     @Test
     public void testSignature_SHA_1withDSA() throws Exception {
-        Signature.getInstance("SHA-1withDSA", getProviderName());
+        try {
+            Signature.getInstance("SHA-1withDSA", getProviderName());
+        } catch (NoSuchAlgorithmException nsae) {
+            if (getProviderName().equals("OpenJCEPlusFIPS")) {
+                assertEquals("no such algorithm: SHA-1withDSA for provider OpenJCEPlusFIPS", nsae.getMessage());
+                return;
+            } else {
+                throw nsae;
+            }
+        }
     }
 
     @Test
     public void testSignature_SHA_1_DSA() throws Exception {
-        Signature.getInstance("SHA-1/DSA", getProviderName());
+        try {
+            Signature.getInstance("SHA-1/DSA", getProviderName());
+        } catch (NoSuchAlgorithmException nsae) {
+            if (getProviderName().equals("OpenJCEPlusFIPS")) {
+                assertEquals("no such algorithm: SHA-1/DSA for provider OpenJCEPlusFIPS", nsae.getMessage());
+                return;
+            } else {
+                throw nsae;
+            }
+        }
     }
 
     @Test
     public void testSignature_SHA1_DSA() throws Exception {
-        Signature.getInstance("SHA1/DSA", getProviderName());
+        try {
+            Signature.getInstance("SHA1/DSA", getProviderName());
+        } catch (NoSuchAlgorithmException nsae) {
+            if (getProviderName().equals("OpenJCEPlusFIPS")) {
+                assertEquals("no such algorithm: SHA1/DSA for provider OpenJCEPlusFIPS", nsae.getMessage());
+                return;
+            } else {
+                throw nsae;
+            }
+        }
     }
 
     @Test
     public void testSignature_SHA_DSA() throws Exception {
-        Signature.getInstance("SHA/DSA", getProviderName());
+        try {
+            Signature.getInstance("SHA/DSA", getProviderName());
+        } catch (NoSuchAlgorithmException nsae) {
+            if (getProviderName().equals("OpenJCEPlusFIPS")) {
+                assertEquals("no such algorithm: SHA/DSA for provider OpenJCEPlusFIPS", nsae.getMessage());
+                return;
+            } else {
+                throw nsae;
+            }
+        }
     }
 
     @Test
     public void testSignature_DSS() throws Exception {
-        Signature.getInstance("DSS", getProviderName());
+        try {
+            Signature.getInstance("DSS", getProviderName());
+        } catch (NoSuchAlgorithmException nsae) {
+            if (getProviderName().equals("OpenJCEPlusFIPS")) {
+                assertEquals("no such algorithm: DSS for provider OpenJCEPlusFIPS", nsae.getMessage());
+                return;
+            } else {
+                throw nsae;
+            }
+        }
     }
 
     @Test
     public void testSignature_SHAwithDSA() throws Exception {
-        Signature.getInstance("SHAwithDSA", getProviderName());
+        try {
+            Signature.getInstance("SHAwithDSA", getProviderName());
+        } catch (NoSuchAlgorithmException nsae) {
+            if (getProviderName().equals("OpenJCEPlusFIPS")) {
+                assertEquals("no such algorithm: SHAwithDSA for provider OpenJCEPlusFIPS", nsae.getMessage());
+                return;
+            } else {
+                throw nsae;
+            }
+        }
     }
 
     @Test
     public void testSignature_DSAWithSHA1() throws Exception {
-        Signature.getInstance("DSAWithSHA1", getProviderName());
+        try {
+            Signature.getInstance("DSAWithSHA1", getProviderName());
+        } catch (NoSuchAlgorithmException nsae) {
+            if (getProviderName().equals("OpenJCEPlusFIPS")) {
+                assertEquals("no such algorithm: DSAWithSHA1 for provider OpenJCEPlusFIPS", nsae.getMessage());
+                return;
+            } else {
+                throw nsae;
+            }
+        }
     }
 
     @Test
     public void testSignature_OID_1_3_14_3_2_13() throws Exception {
-        Signature.getInstance("OID.1.3.14.3.2.13", getProviderName());
+        try {
+            Signature.getInstance("OID.1.3.14.3.2.13", getProviderName());
+        } catch (NoSuchAlgorithmException nsae) {
+            if (getProviderName().equals("OpenJCEPlusFIPS")) {
+                assertEquals("no such algorithm: OID.1.3.14.3.2.13 for provider OpenJCEPlusFIPS", nsae.getMessage());
+                return;
+            } else {
+                throw nsae;
+            }
+        }
     }
 
     @Test
     public void testSignature_OID_1_3_14_3_2_27() throws Exception {
-        Signature.getInstance("OID.1.3.14.3.2.27", getProviderName());
+        try {
+            Signature.getInstance("OID.1.3.14.3.2.27", getProviderName());
+        } catch (NoSuchAlgorithmException nsae) {
+            if (getProviderName().equals("OpenJCEPlusFIPS")) {
+                assertEquals("no such algorithm: OID.1.3.14.3.2.27 for provider OpenJCEPlusFIPS", nsae.getMessage());
+                return;
+            } else {
+                throw nsae;
+            }
+        }
     }
 
     @Test
@@ -276,22 +429,58 @@ public class TestAliases extends BaseTestJunit5 {
 
     @Test
     public void testSignature_SHAwithECDSA() throws Exception {
-        Signature.getInstance("SHAwithECDSA", getProviderName());
+        try {
+            Signature.getInstance("SHAwithECDSA", getProviderName());
+        } catch (NoSuchAlgorithmException nsae) {
+            if (getProviderName().equals("OpenJCEPlusFIPS")) {
+                assertEquals("no such algorithm: SHAwithECDSA for provider OpenJCEPlusFIPS", nsae.getMessage());
+                return;
+            } else {
+                throw nsae;
+            }
+        }
     }
 
     @Test
     public void testSignature_SHA_1withECDSA() throws Exception {
-        Signature.getInstance("SHA-1withECDSA", getProviderName());
+        try {
+            Signature.getInstance("SHA-1withECDSA", getProviderName());
+        } catch (NoSuchAlgorithmException nsae) {
+            if (getProviderName().equals("OpenJCEPlusFIPS")) {
+                assertEquals("no such algorithm: SHA-1withECDSA for provider OpenJCEPlusFIPS", nsae.getMessage());
+                return;
+            } else {
+                throw nsae;
+            }
+        }
     }
 
     @Test
     public void testSignature_SHA_ECDSA() throws Exception {
-        Signature.getInstance("SHA/ECDSA", getProviderName());
+        try {
+            Signature.getInstance("SHA/ECDSA", getProviderName());
+        } catch (NoSuchAlgorithmException nsae) {
+            if (getProviderName().equals("OpenJCEPlusFIPS")) {
+                assertEquals("no such algorithm: SHA/ECDSA for provider OpenJCEPlusFIPS", nsae.getMessage());
+                return;
+            } else {
+                throw nsae;
+            }
+        }
     }
 
     @Test
     public void testSignature_SHA_1_ECDSA() throws Exception {
-        Signature.getInstance("SHA-1/ECDSA", getProviderName());
+        try {
+            Signature.getInstance("SHA-1/ECDSA", getProviderName());
+        } catch (NoSuchAlgorithmException nsae) {
+            if (getProviderName().equals("OpenJCEPlusFIPS")) {
+                assertEquals("no such algorithm: SHA-1/ECDSA for provider OpenJCEPlusFIPS", nsae.getMessage());
+                return;
+            } else {
+                throw nsae;
+            }
+        }
     }
 
     @Test
@@ -386,7 +575,6 @@ public class TestAliases extends BaseTestJunit5 {
 
     @Test
     public void testSignature_SHA5withRSA() throws Exception {
-
         Signature.getInstance("SHA5withRSA", getProviderName());
     }
 
@@ -394,11 +582,4 @@ public class TestAliases extends BaseTestJunit5 {
     public void testSignature_SHA5_RSA() throws Exception {
         Signature.getInstance("SHA5/RSA", getProviderName());
     }
-
-    @Test
-    public void testAliases() throws Exception {
-        System.out.println("executing testAliases SHA5/RSA");
-        Signature.getInstance("SHA5/RSA", getProviderName());
-    }
 }
-

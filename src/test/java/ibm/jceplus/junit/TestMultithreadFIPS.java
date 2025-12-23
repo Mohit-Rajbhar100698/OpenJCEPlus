@@ -40,7 +40,6 @@ public class TestMultithreadFIPS {
             "ibm.jceplus.junit.openjceplusfips.multithread.TestAESGCMSameBuffer",
             "ibm.jceplus.junit.openjceplusfips.multithread.TestAESGCMUpdate",
             "ibm.jceplus.junit.openjceplusfips.multithread.TestAESGCMWithByteBuffer",
-            "ibm.jceplus.junit.openjceplusfips.multithread.TestAliases",
             "ibm.jceplus.junit.openjceplusfips.multithread.TestDESede",
             "ibm.jceplus.junit.openjceplusfips.multithread.TestDH",
             "ibm.jceplus.junit.openjceplusfips.multithread.TestDSAKey",
