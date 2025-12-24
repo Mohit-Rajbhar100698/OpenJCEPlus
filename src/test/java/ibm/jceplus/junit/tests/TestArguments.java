@@ -67,6 +67,34 @@ public class TestArguments {
     }
 
     /**
+     * Provides enabled OpenJCEPlus* providers for AESGCMCICOWithGCMANDAAD tests
+     *
+     * @return A stream of enabled TestProvider.
+     */
+    public static Stream<TestProvider> aesGcmCicoWithGcmAndAADJCEPlusProviders() {
+        List<TestProvider> aesGcmCicoWithGcmAndAADActiveProviders = getEnabledProviders();
+
+        if (aesGcmCicoWithGcmAndAADActiveProviders.isEmpty()) {
+            throw new IllegalArgumentException("No test providers found, unlikely this is what was asked for.");
+        }
+        return aesGcmCicoWithGcmAndAADActiveProviders.stream();
+    }
+
+    /**
+     * Provides enabled OpenJCEPlus* providers for AESCipherInputStreamExceptions tests
+     *
+     * @return A stream of enabled TestProvider.
+     */
+    public static Stream<TestProvider> aesCipherInputStreamExceptionsJCEPlusProviders() {
+        List<TestProvider> aesCipherInputStreamExceptionsActiveProviders = getEnabledProviders();
+
+        if (aesCipherInputStreamExceptionsActiveProviders.isEmpty()) {
+            throw new IllegalArgumentException("No test providers found, unlikely this is what was asked for.");
+        }
+        return aesCipherInputStreamExceptionsActiveProviders.stream();
+    }
+
+    /**
      * Generates combinations of all key sizes and OpenJCEPlus* providers under test.
      * 
      * If no tags are found, all variations are returned.
