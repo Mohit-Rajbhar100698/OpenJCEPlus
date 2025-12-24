@@ -17,7 +17,6 @@ import org.junit.platform.suite.api.Suite;
     TestAESCCM2.class,
     TestAESCCMInteropBC.class,
     TestAESCCMParameters.class,
-    TestAESCopySafe.class,
     TestAESGCM_ExtIV.class,
     TestAESGCM_IntIV.class,
     TestAESGCMBufferIV.class,

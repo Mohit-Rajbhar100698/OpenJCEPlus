@@ -139,4 +139,23 @@ abstract public class BaseTest {
             return new String[0];
         }
     }
+
+    /**
+     * Converts a byte array to a hex string.   
+     * @param input the byte array to convert
+     * @return the hex string
+     */
+    public static String bytesToHex(byte[] input) {
+        if (input == null) {
+            return "<NULL>";
+        }
+
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < input.length; ++i) {
+            sb.append(String.format("%02x", input[i] & 0xff));
+        }
+
+        return sb.toString();
+    }
+        
 }

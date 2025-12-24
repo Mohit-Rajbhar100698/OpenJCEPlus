@@ -1,5 +1,5 @@
 /*
- * Copyright IBM Corp. 2023, 2024
+ * Copyright IBM Corp. 2025
  *
  * This code is free software; you can redistribute it and/or modify it
  * under the terms provided by IBM in the LICENSE file that accompanied
@@ -7,7 +7,7 @@
  */
 
 
-package ibm.jceplus.junit.base;
+package ibm.jceplus.junit.tests;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -19,11 +19,25 @@ import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.params.Parameter;
+import org.junit.jupiter.params.ParameterizedClass;
+import org.junit.jupiter.params.provider.MethodSource;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-public class BaseTestAESCopySafe extends BaseTestJunit5 {
+@Tag(TestProvider.OPENJCEPLUS_NAME)
+@Tag(TestProvider.OPENJCEPLUS_FIPS_NAME)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@ParameterizedClass
+@MethodSource("ibm.jceplus.junit.tests.TestArguments#aesCopySafeJCEPlusProviders")
+public class TestAESCopySafe extends BaseTest {
+
+    @Parameter(0)
+    TestProvider provider;
 
     private static final boolean DEBUG = false;
     private static final int INPUT_LENGTH = 32; // should be a multiple of block size
@@ -35,6 +49,11 @@ public class BaseTestAESCopySafe extends BaseTestJunit5 {
     enum MODE { CBC, GCM }
 
     protected int specifiedKeySize = 128;
+
+    @BeforeEach
+    public void setUp() throws Exception {
+        setAndInsertProvider(provider);
+    }
 
     @Test
     public void testOverlappingBuffer() throws Exception {
@@ -73,7 +92,7 @@ public class BaseTestAESCopySafe extends BaseTestJunit5 {
         if (DEBUG) {
             System.out.println("Calling c." + (isUpdate ? "update" : "doFinal") + "(workingBuffer, 0, INPUT_LENGTH)");
             System.out.println("    INPUT_LENGTH: " + INPUT_LENGTH);
-            System.out.println("    workingBuffer:\n" + BaseUtils.bytesToHex(workingBuffer));
+            System.out.println("    workingBuffer:\n" + BaseTest.bytesToHex(workingBuffer));
         }
         byte[] cipherText = null;
         if (isUpdate) {
@@ -82,7 +101,7 @@ public class BaseTestAESCopySafe extends BaseTestJunit5 {
             cipherText = c.doFinal(workingBuffer, 0, INPUT_LENGTH);
         }
         if (DEBUG) {
-            System.out.println("cipherText:\n" + BaseUtils.bytesToHex(cipherText));
+            System.out.println("cipherText:\n" + BaseTest.bytesToHex(cipherText));
             System.out.println ("cipherText.length: " + cipherText.length);
         }
 
@@ -98,7 +117,7 @@ public class BaseTestAESCopySafe extends BaseTestJunit5 {
             System.out.println("    inputOffset:" + inputOffset);
             System.out.println("    INPUT_LENGTH:" + INPUT_LENGTH);
             System.out.println("    outputOffset:" + outputOffset);
-            System.out.println("    workingBuffer:\n" + BaseUtils.bytesToHex(workingBuffer));
+            System.out.println("    workingBuffer:\n" + BaseTest.bytesToHex(workingBuffer));
         }
         if (isUpdate) {
             c.update(workingBuffer, inputOffset, INPUT_LENGTH, workingBuffer, outputOffset);
@@ -106,7 +125,7 @@ public class BaseTestAESCopySafe extends BaseTestJunit5 {
             c.doFinal(workingBuffer, inputOffset, INPUT_LENGTH, workingBuffer, outputOffset);
         }
         if (DEBUG) {
-            System.out.println("workingBuffer:\n" + BaseUtils.bytesToHex(workingBuffer));
+            System.out.println("workingBuffer:\n" + BaseTest.bytesToHex(workingBuffer));
         }
         
         assertArrayEquals(Arrays.copyOfRange(workingBuffer, outputOffset, outputOffset + cipherText.length), cipherText, "Encryption check failed.");
@@ -129,7 +148,7 @@ public class BaseTestAESCopySafe extends BaseTestJunit5 {
             System.out.println("    inputOffset: " + inputOffset);
             System.out.println("    cipherText.length: " + cipherText.length);
             System.out.println("    outputOffset: " + outputOffset);
-            System.out.println("    workingBuffer:\n" + BaseUtils.bytesToHex(workingBuffer));
+            System.out.println("    workingBuffer:\n" + BaseTest.bytesToHex(workingBuffer));
         }
         if (isUpdate) {
             c.update(workingBuffer, inputOffset, cipherText.length, workingBuffer, outputOffset);
@@ -137,7 +156,7 @@ public class BaseTestAESCopySafe extends BaseTestJunit5 {
             c.doFinal(workingBuffer, inputOffset, cipherText.length, workingBuffer, outputOffset);
         }
         if (DEBUG) {
-            System.out.println("New Clear Text:\n" + BaseUtils.bytesToHex(workingBuffer));
+            System.out.println("New Clear Text:\n" + BaseTest.bytesToHex(workingBuffer));
         }
         assertArrayEquals(Arrays.copyOfRange(workingBuffer, outputOffset, outputOffset + clearText.length), clearText, "Decryption check failed.");
         if (DEBUG) {
