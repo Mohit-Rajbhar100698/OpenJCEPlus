@@ -1,12 +1,12 @@
 /*
- * Copyright IBM Corp. 2023, 2024
+ * Copyright IBM Corp. 2025
  *
  * This code is free software; you can redistribute it and/or modify it
  * under the terms provided by IBM in the LICENSE file that accompanied
  * this code, including the "Classpath" Exception described therein.
  */
 
-package ibm.jceplus.junit.base;
+package ibm.jceplus.junit.tests;
 
 import java.lang.reflect.Method;
 import java.security.AlgorithmParameters;
@@ -16,10 +16,25 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.params.Parameter;
+import org.junit.jupiter.params.ParameterizedClass;
+import org.junit.jupiter.params.provider.MethodSource;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class BaseTestAESGCMLong extends BaseTestJunit5 {
+@Tag(TestProvider.OPENJCEPLUS_NAME)
+@Tag(TestProvider.OPENJCEPLUS_FIPS_NAME)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@ParameterizedClass
+@MethodSource("ibm.jceplus.junit.tests.TestArguments#aesGcmLongJCEPlusProviders")
+public class TestAESGCMLong extends BaseTest {
+
+    @Parameter(0)
+    TestProvider provider;
+
     private final static int GCM_IV_LENGTH = 12;
     private final static int GCM_TAG_LENGTH = 16;
     private static int ARRAY_OFFSET = 16;
@@ -38,6 +53,11 @@ public class BaseTestAESGCMLong extends BaseTestJunit5 {
         return cipher;
     }
 
+    @BeforeEach
+    public void setUp() throws Exception {
+        setAndInsertProvider(provider);
+    }
+   
     @Test
     public void testWith128Times8() throws Exception {
 
