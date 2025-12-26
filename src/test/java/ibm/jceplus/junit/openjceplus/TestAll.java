@@ -20,7 +20,6 @@ import org.junit.platform.suite.api.Suite;
     TestAESGCM_ExtIV.class,
     TestAESGCM_IntIV.class,
     TestAESGCMBufferIV.class,
-    TestAESGCMSameBuffer.class,
     TestAESGCMUpdate.class,
     TestAESGCMUpdateInteropBC.class,
     TestAESGCMWithByteBuffer.class,

@@ -1,12 +1,12 @@
 /*
- * Copyright IBM Corp. 2023, 2024
+ * Copyright IBM Corp. 2025
  *
  * This code is free software; you can redistribute it and/or modify it
  * under the terms provided by IBM in the LICENSE file that accompanied
  * this code, including the "Classpath" Exception described therein.
  */
 
-package ibm.jceplus.junit.base;
+package ibm.jceplus.junit.tests;
 
 import java.nio.ByteBuffer;
 import java.security.AlgorithmParameters;
@@ -14,7 +14,13 @@ import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.params.Parameter;
+import org.junit.jupiter.params.ParameterizedClass;
+import org.junit.jupiter.params.provider.MethodSource;
 
 /*
  * @test
@@ -22,7 +28,15 @@ import org.junit.jupiter.api.Test;
  * @summary Check if AEAD operations work correctly when buffers used
  *          for storing plain text and cipher text are overlapped or the same
  */
-public class BaseTestAESGCMSameBuffer extends BaseTestJunit5 {
+@Tag(TestProvider.OPENJCEPLUS_NAME)
+@Tag(TestProvider.OPENJCEPLUS_FIPS_NAME)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@ParameterizedClass
+@MethodSource("ibm.jceplus.junit.tests.TestArguments#aesGcmSameBufferJCEPlusProviders")
+public class TestAESGCMSameBuffer extends BaseTest {
+
+    @Parameter(0)
+    TestProvider provider;
 
     private static final String AES = "AES";
     private static final String GCM = "GCM";
@@ -37,6 +51,11 @@ public class BaseTestAESGCMSameBuffer extends BaseTestJunit5 {
     private String transformation;
     private int textLength;
     private int AADLength;
+
+    @BeforeEach
+    public void setUp() throws Exception {
+        setAndInsertProvider(provider);
+    }
 
     @Test
     public void testAESGCMSameBuffer() throws Exception {
@@ -101,8 +120,8 @@ public class BaseTestAESGCMSameBuffer extends BaseTestJunit5 {
         int outputLength = c.getOutputSize(textLength);
         int outputBufSize = outputLength + offset * 2;
 
-        byte[] inputText = BaseUtils.generateBytes(outputBufSize);
-        byte[] AAD = BaseUtils.generateBytes(AADLength);
+        byte[] inputText = BaseTest.generateBytes(outputBufSize);
+        byte[] AAD = BaseTest.generateBytes(AADLength);
 
         // do the test
         runGCMWithSeparateArray(Cipher.ENCRYPT_MODE, AAD, inputText, offset * 2, textLength, offset,
@@ -122,7 +141,7 @@ public class BaseTestAESGCMSameBuffer extends BaseTestJunit5 {
         int outputLength = c.getOutputSize(textLength);
         int outputBufSize = AADLength + outputLength + offset * 2;
 
-        byte[] AAD_and_text = BaseUtils.generateBytes(outputBufSize);
+        byte[] AAD_and_text = BaseTest.generateBytes(outputBufSize);
 
         // do the test
         runGCMWithSameArray(Cipher.ENCRYPT_MODE, AAD_and_text, AADLength + offset, textLength,
@@ -138,7 +157,7 @@ public class BaseTestAESGCMSameBuffer extends BaseTestJunit5 {
     private void doTestWithSeparatedBuffer(int offset, AlgorithmParameters params)
             throws Exception {
         // prepare AAD byte buffers to test
-        byte[] AAD = BaseUtils.generateBytes(AADLength);
+        byte[] AAD = BaseTest.generateBytes(AADLength);
         ByteBuffer AAD_Buf = ByteBuffer.allocate(AADLength);
         AAD_Buf.put(AAD, 0, AAD.length);
         AAD_Buf.flip();
@@ -147,7 +166,7 @@ public class BaseTestAESGCMSameBuffer extends BaseTestJunit5 {
         Cipher c = createCipher(Cipher.ENCRYPT_MODE, params);
         int outputLength = c.getOutputSize(textLength);
         int outputBufSize = outputLength + offset;
-        byte[] inputText = BaseUtils.generateBytes(outputBufSize);
+        byte[] inputText = BaseTest.generateBytes(outputBufSize);
         ByteBuffer plainTextBB = ByteBuffer.allocateDirect(inputText.length);
         plainTextBB.put(inputText);
         plainTextBB.position(offset);
@@ -173,7 +192,7 @@ public class BaseTestAESGCMSameBuffer extends BaseTestJunit5 {
 
         // prepare byte buffer contained AAD and plain text
         int bufSize = AADLength + offset + outputLength;
-        byte[] AAD_and_Text = BaseUtils.generateBytes(bufSize);
+        byte[] AAD_and_Text = BaseTest.generateBytes(bufSize);
         ByteBuffer AAD_and_Text_Buf = ByteBuffer.allocate(bufSize);
         AAD_and_Text_Buf.put(AAD_and_Text, 0, AAD_and_Text.length);
 
