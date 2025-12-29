@@ -134,7 +134,7 @@ public class TestArguments {
             throw new IllegalArgumentException("No test providers found, unlikely this is what was asked for.");
         }
         return aesGcmNonExpandingActiveProviders.stream();
-    }    
+    }
     
     /**
      * Provides enabled OpenJCEPlus* providers for AESGCMSameBuffer tests
@@ -148,7 +148,21 @@ public class TestArguments {
             throw new IllegalArgumentException("No test providers found, unlikely this is what was asked for.");
         }
         return aesGcmSameBufferActiveProviders.stream();
-    }    
+    }
+    
+    /**
+     * Provides enabled OpenJCEPlus* providers for AESGCMWithByteBuffer tests
+     *
+     * @return A stream of enabled TestProvider.
+     */
+    public static Stream<TestProvider> aesGcmWithByteBufferJCEPlusProviders() {
+        List<TestProvider> aesGcmWithByteBufferActiveProviders = getEnabledProviders();
+
+        if (aesGcmWithByteBufferActiveProviders.isEmpty()) {
+            throw new IllegalArgumentException("No test providers found, unlikely this is what was asked for.");
+        }
+        return aesGcmWithByteBufferActiveProviders.stream();
+    }
     
     /**
      * Generates combinations of all key sizes and OpenJCEPlus* providers under test.

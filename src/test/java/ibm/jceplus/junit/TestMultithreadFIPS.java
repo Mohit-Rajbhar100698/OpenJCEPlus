@@ -32,7 +32,6 @@ public class TestMultithreadFIPS {
     private final int timeoutSec = 4500;
     private final String[] testList = {
             "ibm.jceplus.junit.openjceplusfips.multithread.TestAESGCMUpdate",
-            "ibm.jceplus.junit.openjceplusfips.multithread.TestAESGCMWithByteBuffer",
             "ibm.jceplus.junit.openjceplusfips.multithread.TestDESede",
             "ibm.jceplus.junit.openjceplusfips.multithread.TestDH",
             "ibm.jceplus.junit.openjceplusfips.multithread.TestDSAKey",
