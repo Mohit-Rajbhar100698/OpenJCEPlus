@@ -32,7 +32,6 @@ public class TestMultithread {
     private final int timeoutSec = 4500;
     private final String[] testList = {
             "ibm.jceplus.junit.openjceplus.multithread.TestAESGCMUpdate",
-            "ibm.jceplus.junit.openjceplus.multithread.TestDESede",
             "ibm.jceplus.junit.openjceplus.multithread.TestDH",
             "ibm.jceplus.junit.openjceplus.multithread.TestDSAKey",
             "ibm.jceplus.junit.openjceplus.multithread.TestDSASignatureInteropSUN",

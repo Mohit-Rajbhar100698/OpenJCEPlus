@@ -165,6 +165,20 @@ public class TestArguments {
     }
     
     /**
+     * Provides enabled OpenJCEPlus* providers for DESede tests
+     *
+     * @return A stream of enabled TestProvider.
+     */
+    public static Stream<TestProvider> desEdeJCEPlusProviders() {
+        List<TestProvider> desEdeActiveProviders = getEnabledProviders();
+
+        if (desEdeActiveProviders.isEmpty()) {
+            throw new IllegalArgumentException("No test providers found, unlikely this is what was asked for.");
+        }
+        return desEdeActiveProviders.stream();
+    }    
+    
+    /**
      * Generates combinations of all key sizes and OpenJCEPlus* providers under test.
      * 
      * If no tags are found, all variations are returned.
