@@ -1,21 +1,35 @@
 /*
- * Copyright IBM Corp. 2023, 2024
+ * Copyright IBM Corp. 2025
  *
  * This code is free software; you can redistribute it and/or modify it
  * under the terms provided by IBM in the LICENSE file that accompanied
  * this code, including the "Classpath" Exception described therein.
  */
 
-package ibm.jceplus.junit.base;
+package ibm.jceplus.junit.tests;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.params.Parameter;
+import org.junit.jupiter.params.ParameterizedClass;
+import org.junit.jupiter.params.provider.MethodSource;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class BaseTestHmacSHA3_256 extends BaseTestJunit5 {
+@Tag(TestProvider.OPENJCEPLUS_NAME)
+@Tag(TestProvider.OPENJCEPLUS_FIPS_NAME)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@ParameterizedClass
+@MethodSource("ibm.jceplus.junit.tests.TestArguments#hmacSHA3_256JCEPlusProviders")
+public class TestHmacSHA3_256 extends BaseTest {
+
+    @Parameter(0)
+    TestProvider provider;
 
     // test vectors fromhttps://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/example-values#aMsgAuth
 
@@ -50,7 +64,7 @@ public class BaseTestHmacSHA3_256 extends BaseTestJunit5 {
         data1 = "Sample message for keylen<blocklen";
         data_1 = data1.getBytes(StandardCharsets.UTF_8);
 
-        digest_1 = BaseUtils.hexStringToByteArray(
+        digest_1 = BaseTest.hexStringToByteArray(
                 "4fe8e202c4f058e8dddc23d8c34e467343e23555e24fc2f025d598f558f67205");
 
         key_2 = Arrays.copyOf(NISTKEY_172, 136);
@@ -58,7 +72,7 @@ public class BaseTestHmacSHA3_256 extends BaseTestJunit5 {
         data2 = "Sample message for keylen=blocklen";
         data_2 = data2.getBytes(StandardCharsets.UTF_8);
 
-        digest_2 = BaseUtils.hexStringToByteArray(
+        digest_2 = BaseTest.hexStringToByteArray(
                 "68b94e2e538a9be4103bebb5aa016d47961d4d1aa906061313b557f8af2c3faa");
 
         key_3 = Arrays.copyOf(NISTKEY_172, 168);
@@ -66,8 +80,13 @@ public class BaseTestHmacSHA3_256 extends BaseTestJunit5 {
         data3 = "Sample message for keylen>blocklen";
         data_3 = data3.getBytes(StandardCharsets.UTF_8);
 
-        digest_3 = BaseUtils.hexStringToByteArray(
+        digest_3 = BaseTest.hexStringToByteArray(
                 "9bcf2c238e235c3ce88404e813bd2f3a97185ac6f238c63d6229a00b07974258");
+    }
+
+    @BeforeEach
+    public void setUp() throws Exception {
+        setAndInsertProvider(provider);
     }
 
     @Test
