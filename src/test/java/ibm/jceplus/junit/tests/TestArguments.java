@@ -191,7 +191,21 @@ public class TestArguments {
         }
         return miniRSAPSS2ActiveProviders.stream();
     }
-    
+
+    /**
+     * Provides enabled OpenJCEPlus* providers for ECDSASignature tests
+     *
+     * @return A stream of enabled TestProvider.
+     */
+    public static Stream<TestProvider> ecdSaSignatureJCEPlusProviders() {
+        List<TestProvider> ecdSaSignatureActiveProviders = getEnabledProviders();
+
+        if (ecdSaSignatureActiveProviders.isEmpty()) {
+            throw new IllegalArgumentException("No test providers found, unlikely this is what was asked for.");
+        }
+        return ecdSaSignatureActiveProviders.stream();
+    }
+        
     /**
      * Generates combinations of all key sizes and OpenJCEPlus* providers under test.
      * 

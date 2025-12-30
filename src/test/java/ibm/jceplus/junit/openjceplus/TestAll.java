@@ -46,7 +46,6 @@ import org.junit.platform.suite.api.Suite;
     TestECDHInteropSunEC.class,
     TestECDHKeyAgreementParamValidation.class,
     TestECDHMultiParty.class,
-    TestECDSASignature.class,
     TestECDSASignatureInteropBC.class,
     TestECDSASignatureInteropSunEC.class,
     TestECKeyImport.class,
