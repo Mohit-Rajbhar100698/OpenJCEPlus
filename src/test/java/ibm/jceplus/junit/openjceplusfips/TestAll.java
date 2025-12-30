@@ -45,7 +45,6 @@ import org.junit.platform.suite.api.Suite;
     TestHmacSHA224InteropSunJCE.class,
     TestHmacSHA256.class,
     TestHmacSHA256InteropSunJCE.class,
-    TestHmacSHA3_512.class,
     TestHmacSHA384.class,
     TestHmacSHA384InteropSunJCE.class,
     TestHmacSHA512.class,
