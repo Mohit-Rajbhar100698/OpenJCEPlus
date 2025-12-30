@@ -59,7 +59,6 @@ import org.junit.platform.suite.api.Suite;
     TestInvalidArrayIndex.class,
     TestKeyEncodings.class,
     TestKeySerialization.class,
-    TestMiniRSAPSS2.class,
     TestPBKDF2.class,
     TestPBKDF2Interop.class,
     TestPublicMethodsToMakeNonPublic.class,

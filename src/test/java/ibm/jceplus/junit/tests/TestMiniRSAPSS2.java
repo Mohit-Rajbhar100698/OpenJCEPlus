@@ -1,12 +1,12 @@
 /*
- * Copyright IBM Corp. 2023, 2024
+ * Copyright IBM Corp. 2025
  *
  * This code is free software; you can redistribute it and/or modify it
  * under the terms provided by IBM in the LICENSE file that accompanied
  * this code, including the "Classpath" Exception described therein.
  */
 
-package ibm.jceplus.junit.base;
+package ibm.jceplus.junit.tests;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -20,11 +20,24 @@ import java.security.spec.MGF1ParameterSpec;
 import java.security.spec.PSSParameterSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.params.Parameter;
+import org.junit.jupiter.params.ParameterizedClass;
+import org.junit.jupiter.params.provider.MethodSource;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-public class BaseTestMiniRSAPSS2 extends BaseTestJunit5 {
+@Tag(TestProvider.OPENJCEPLUS_NAME)
+@Tag(TestProvider.OPENJCEPLUS_FIPS_NAME)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@ParameterizedClass
+@MethodSource("ibm.jceplus.junit.tests.TestArguments#miniRSAPSS2JCEPlusProviders")
+public class TestMiniRSAPSS2 extends BaseTest {
+
+    @Parameter(0)
+    TestProvider provider;
 
     String signingProvidersSignatureAlgorithmName = null;
     String verifyingProvidersSignatureAlgorithmName = null;
@@ -53,7 +66,7 @@ public class BaseTestMiniRSAPSS2 extends BaseTestJunit5 {
 
     @BeforeEach
     public void setUp() throws Exception {
-
+        setAndInsertProvider(provider);
         System.out.println(
                 "===============================================================================");
         System.out.println(

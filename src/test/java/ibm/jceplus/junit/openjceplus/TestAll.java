@@ -79,7 +79,6 @@ import org.junit.platform.suite.api.Suite;
     TestKeyEncodings.class,
     TestKeySerialization.class,
     TestMD5.class,
-    TestMiniRSAPSS2.class,
     TestOAEPOrderCheck.class,
     TestPBEKeyFactory.class,
     TestPBEKeyFactoryInterop.class,

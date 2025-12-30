@@ -176,7 +176,21 @@ public class TestArguments {
             throw new IllegalArgumentException("No test providers found, unlikely this is what was asked for.");
         }
         return desEdeActiveProviders.stream();
-    }    
+    }
+    
+    /**
+     * Provides enabled OpenJCEPlus* providers for MiniRSAPSS2 tests
+     *
+     * @return A stream of enabled TestProvider.
+     */
+    public static Stream<TestProvider> miniRSAPSS2JCEPlusProviders() {
+        List<TestProvider> miniRSAPSS2ActiveProviders = getEnabledProviders();
+
+        if (miniRSAPSS2ActiveProviders.isEmpty()) {
+            throw new IllegalArgumentException("No test providers found, unlikely this is what was asked for.");
+        }
+        return miniRSAPSS2ActiveProviders.stream();
+    }
     
     /**
      * Generates combinations of all key sizes and OpenJCEPlus* providers under test.
