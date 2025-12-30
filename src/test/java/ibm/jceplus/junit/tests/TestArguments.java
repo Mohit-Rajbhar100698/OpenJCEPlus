@@ -221,7 +221,7 @@ public class TestArguments {
     }
         
     /**
-     * Provides enabled OpenJCEPlus* providers for HmacSHA3_224 tests
+     * Provides enabled OpenJCEPlus* providers for HmacSHA3_256 tests
      *
      * @return A stream of enabled TestProvider.
      */
@@ -233,7 +233,21 @@ public class TestArguments {
         }
         return hmacSHA3_256ActiveProviders.stream();
     }
-        
+
+    /**
+     * Provides enabled OpenJCEPlus* providers for HmacSHA3_384 tests
+     *
+     * @return A stream of enabled TestProvider.
+     */
+    public static Stream<TestProvider> hmacSHA3_384JCEPlusProviders() {
+        List<TestProvider> hmacSHA3_384ActiveProviders = getEnabledProviders();
+
+        if (hmacSHA3_384ActiveProviders.isEmpty()) {
+            throw new IllegalArgumentException("No test providers found, unlikely this is what was asked for.");
+        }
+        return hmacSHA3_384ActiveProviders.stream();
+    }
+     
     /**
      * Generates combinations of all key sizes and OpenJCEPlus* providers under test.
      * 
