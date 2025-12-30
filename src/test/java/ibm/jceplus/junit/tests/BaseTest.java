@@ -169,6 +169,23 @@ abstract public class BaseTest {
             bytes[i] = (byte) (i % 256);
         }
         return bytes;
-    }    
+    }
+
+    /**
+     * Converts a hex string to a byte array.
+     * @param string the hex string to convert
+     * @return the byte array
+     */
+    public static byte[] hexStringToByteArray(String string) {
+        String s = string.trim().replaceAll(" +", ""); // remove all spaces
+
+        byte[] b = new byte[s.length() / 2];
+        for (int i = 0; i < b.length; i++) {
+            int index = i * 2;
+            int v = Integer.parseInt(s.substring(index, index + 2), 16);
+            b[i] = (byte) v;
+        }
+        return b;
+    }
         
 }
