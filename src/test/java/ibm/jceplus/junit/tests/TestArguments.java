@@ -277,6 +277,20 @@ public class TestArguments {
     }
     
     /**
+     * Provides enabled OpenJCEPlus* providers for SHA3_256 tests
+     *
+     * @return A stream of enabled TestProvider.
+     */
+    public static Stream<TestProvider> sha3_256JCEPlusProviders() {
+        List<TestProvider> sha3_256ActiveProviders = getEnabledProviders();
+
+        if (sha3_256ActiveProviders.isEmpty()) {
+            throw new IllegalArgumentException("No test providers found, unlikely this is what was asked for.");
+        }
+        return sha3_256ActiveProviders.stream();
+    }
+    
+    /**
      * Generates combinations of all key sizes and OpenJCEPlus* providers under test.
      * 
      * If no tags are found, all variations are returned.
