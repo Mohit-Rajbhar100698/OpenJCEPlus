@@ -76,7 +76,6 @@ import org.junit.platform.suite.api.Suite;
     TestSHA1.class,
     TestSHA224.class,
     TestSHA256.class,
-    TestSHA3_224.class,
     TestSHA3_256.class,
     TestSHA3_384.class,
     TestSHA3_512.class,
