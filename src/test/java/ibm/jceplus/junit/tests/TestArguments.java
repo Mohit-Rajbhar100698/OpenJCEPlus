@@ -305,6 +305,20 @@ public class TestArguments {
     }
         
     /**
+     * Provides enabled OpenJCEPlus* providers for SHA3_512 tests
+     *
+     * @return A stream of enabled TestProvider.
+     */
+    public static Stream<TestProvider> sha3_512JCEPlusProviders() {
+        List<TestProvider> sha3_512ActiveProviders = getEnabledProviders();
+
+        if (sha3_512ActiveProviders.isEmpty()) {
+            throw new IllegalArgumentException("No test providers found, unlikely this is what was asked for.");
+        }
+        return sha3_512ActiveProviders.stream();
+    }
+    
+    /**
      * Generates combinations of all key sizes and OpenJCEPlus* providers under test.
      * 
      * If no tags are found, all variations are returned.
