@@ -1,5 +1,5 @@
 /*
- * Copyright IBM Corp. 2023, 2025
+ * Copyright IBM Corp. 2023, 2026
  *
  * This code is free software; you can redistribute it and/or modify it
  * under the terms provided by IBM in the LICENSE file that accompanied
@@ -40,7 +40,6 @@ public class TestMultithreadFIPS {
             "ibm.jceplus.junit.openjceplusfips.multithread.TestAESGCMSameBuffer",
             "ibm.jceplus.junit.openjceplusfips.multithread.TestAESGCMUpdate",
             "ibm.jceplus.junit.openjceplusfips.multithread.TestAESGCMWithByteBuffer",
-            "ibm.jceplus.junit.openjceplusfips.multithread.TestAliases",
             "ibm.jceplus.junit.openjceplusfips.multithread.TestDESede",
             "ibm.jceplus.junit.openjceplusfips.multithread.TestDH",
             "ibm.jceplus.junit.openjceplusfips.multithread.TestDSAKey",

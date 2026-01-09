@@ -1,5 +1,5 @@
 /*
- * Copyright IBM Corp. 2023, 2025
+ * Copyright IBM Corp. 2023, 2026
  *
  * This code is free software; you can redistribute it and/or modify it
  * under the terms provided by IBM in the LICENSE file that accompanied
@@ -40,7 +40,6 @@ public class TestMultithread {
             "ibm.jceplus.junit.openjceplus.multithread.TestAESGCMSameBuffer",
             "ibm.jceplus.junit.openjceplus.multithread.TestAESGCMUpdate",
             "ibm.jceplus.junit.openjceplus.multithread.TestAESGCMWithByteBuffer",
-            "ibm.jceplus.junit.openjceplus.multithread.TestAliases",
             "ibm.jceplus.junit.openjceplus.multithread.TestDESede",
             "ibm.jceplus.junit.openjceplus.multithread.TestDH",
             "ibm.jceplus.junit.openjceplus.multithread.TestDSAKey",
