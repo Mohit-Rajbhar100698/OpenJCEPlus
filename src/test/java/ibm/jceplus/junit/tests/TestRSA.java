@@ -1,12 +1,12 @@
 /*
- * Copyright IBM Corp. 2023, 2024
+ * Copyright IBM Corp. 2023, 2026
  *
  * This code is free software; you can redistribute it and/or modify it
  * under the terms provided by IBM in the LICENSE file that accompanied
  * this code, including the "Classpath" Exception described therein.
  */
 
-package ibm.jceplus.junit.base;
+package ibm.jceplus.junit.tests;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -40,12 +40,31 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.OAEPParameterSpec;
 import javax.crypto.spec.PSource;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.params.Parameter;
+import org.junit.jupiter.params.ParameterizedClass;
+import org.junit.jupiter.params.provider.MethodSource;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
-public class BaseTestRSA extends BaseTestCipher {
+@Tag(Tags.OPENJCEPLUS_NAME)
+@Tag(Tags.OPENJCEPLUS_FIPS_NAME)
+@Tag(Tags.OPENJCEPLUS_MULTITHREAD_NAME)
+@Tag(Tags.OPENJCEPLUS_FIPS_MULTITHREAD_NAME)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@ParameterizedClass
+@MethodSource("ibm.jceplus.junit.tests.TestArguments#rsaKeySizesAndJCEPlusProviders")
+public class TestRSA extends BaseTestCipher {
+
+    @Parameter(0)
+    int keysize;
+
+    @Parameter(1)
+    TestProvider provider;
 
     static final char[] hexDigits = "0123456789abcdef".toCharArray();
 
@@ -63,6 +82,28 @@ public class BaseTestRSA extends BaseTestCipher {
 
     @BeforeEach
     public void setUp() throws Exception {
+
+        setKeySize(keysize);
+        setAndInsertProvider(provider);
+
+        int keySize = getKeySize();
+
+        if (keySize == 512) {
+            specifiedKeySize = 512;
+        } else if (keySize == 1024) {
+            specifiedKeySize = 1024;
+        } else if (keySize == 2048) {
+            specifiedKeySize = 2048;
+        } else if (keySize == 3072) {
+            specifiedKeySize = 3072;
+        } else if (keySize == 4096) {
+            specifiedKeySize = 4096;
+        } else {
+            throw new Exception("Illegal key size in BaseTestRSA.");
+        }
+
+        validateRSAKeySizeWithJCEPlusProvider(specifiedKeySize, provider);
+
         rsaKeyPairGen = KeyPairGenerator.getInstance("RSA", getProviderName());
         if (specifiedKeySize > 0) {
             rsaKeyPairGen.initialize(specifiedKeySize, null);
@@ -163,6 +204,35 @@ public class BaseTestRSA extends BaseTestCipher {
 
         assertTrue(true);
 
+    }
+
+    private void validateRSAKeySizeWithJCEPlusProvider(int keySize, TestProvider provider) throws Exception {
+
+        if (provider.getProviderName().equals(TestProvider.OPENJCEPLUS_FIPS_NAME) && (keySize == 512 || keySize == 1024)) {
+
+            try {
+                rsaKeyPairGen = KeyPairGenerator.getInstance("RSA", getProviderName());
+                rsaKeyPairGen.initialize(keySize);
+                rsaKeyPair = rsaKeyPairGen.generateKeyPair();
+                rsaPub = (RSAPublicKey) rsaKeyPair.getPublic();
+                rsaPriv = (RSAPrivateCrtKey) rsaKeyPair.getPrivate();
+                encryptDecrypt("RSA/ECB/OAEPWithSHA-224AndMGF1Padding", getMessage_OAEP_SHA224()); // Run any test to validate key
+
+                fail("RSA " + keySize + " worked unexpectedly in FIPS mode");
+
+            } catch (Exception e) {
+                if (keySize == 512) {
+                    assertTrue(e.getMessage().equals("RSA keys must be at least 2048 bits long"));
+                } else {
+                    assertTrue(e.getMessage().equals("RSA keys must be at least 2048 bits long"));
+                }
+            }
+
+            // Skip remaining tests for this parameter
+            assumeTrue(
+                    false,
+                    "Skipping tests: RSA " + keySize + " not allowed in FIPS provider");
+        }
     }
 
     private void plainKeyEncDec(String alg, int len, Key encKey, Key decKey) throws Exception {
@@ -1070,4 +1140,3 @@ public class BaseTestRSA extends BaseTestCipher {
         }
     }
 }
-
