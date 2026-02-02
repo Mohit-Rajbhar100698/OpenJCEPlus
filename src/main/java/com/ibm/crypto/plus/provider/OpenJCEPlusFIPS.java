@@ -689,6 +689,27 @@ public final class OpenJCEPlusFIPS extends OpenJCEPlusProvider {
         return new OpenJCEPlusFIPSContext();
     }
 
+    /**
+     * Check if the current platform is Mac or Linux on aarch64 architecture,
+     */
+    @Override
+    boolean isFIPS() {
+        String osName = System.getProperty("os.name");
+        String osArch = System.getProperty("os.arch");
+
+        if (osName != null && osArch != null) {
+            boolean isMac = osName.toLowerCase().contains("mac");
+            boolean isLinuxAarch64 = osName.toLowerCase().contains("linux")
+                            && osArch.toLowerCase().contains("aarch64");
+
+            if (isMac || isLinuxAarch64) {
+                return true;
+            }
+        }
+
+        return super.isFIPS();
+    }
+
     // Get SecureRandom to use for crypto operations. Returns a FIPS
     // approved SecureRandom to use. Ignore any user supplied
     // SecureRandom in FIPS mode.
