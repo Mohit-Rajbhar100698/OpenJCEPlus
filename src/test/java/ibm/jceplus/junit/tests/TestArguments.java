@@ -49,6 +49,15 @@ public class TestArguments {
     }
 
     /**
+     * Generates combinations of OpenJCEPlus* providers with the BC provider for interoperability testing.
+     *
+     * @return Stream of Arguments containing (JCEProviders, BC) pairs
+     */
+    public static Stream<Arguments> getOpenJCEPlusWithBCInteropProvider() {
+        return getOpenJCEPlusWithInteropProviders(TestProvider.BC);
+    }
+
+    /**
      * Generates combinations of all key sizes and OpenJCEPlus* providers under test.
      * 
      * If no tags are found, all variations are returned.
@@ -101,5 +110,23 @@ public class TestArguments {
             }
         }
         return enabledProviders.stream();
-    }     
+    }
+
+    /**
+     * Generates combinations of OpenJCEPlus* providers with a specified interoperability provider for testing.
+     *
+     * @param interopProvider The interoperability provider to combine with OpenJCEPlus* providers
+     * @return Stream of Arguments containing (JCEProviders, interopProvider) pairs
+     */
+    protected static Stream<Arguments> getOpenJCEPlusWithInteropProviders(TestProvider interopProvider) {
+        List<TestProvider> enabledProviders = getEnabledProviders().toList();
+
+        List<Arguments> arguments = new ArrayList<>();
+        for (TestProvider jceProvider : enabledProviders) {
+            arguments.add(Arguments.of(jceProvider, interopProvider));
+        }
+
+        return arguments.stream();
+    }
+
 }

@@ -38,7 +38,6 @@ import org.junit.platform.suite.api.Suite;
     TestDHMultiParty.class,
     TestDSAKey.class,
     TestDSASignature.class,
-    TestDSASignatureInteropBC.class,
     TestDSASignatureInteropSUN.class,
     TestECDH.class,
     TestECDHInteropBC.class,
