@@ -55,7 +55,17 @@ public class TestArguments {
      */
     public static Stream<Arguments> getOpenJCEPlusWithSUNInteropProvider() {
         return getOpenJCEPlusWithInteropProviders(TestProvider.SUN);
-    }    
+    }
+
+    /**
+     * Generates combination of only OpenJCEPlus (non-FIPS) provider
+     * with the BC provider for interoperability testing.
+     *
+     * @return Stream of Arguments containing (OpenJCEPlus, BC) pair
+     */
+    protected static Stream<Arguments> getOpenJCEPlusOnlyWithBCInteropProvider() {
+        return Stream.of(Arguments.of(TestProvider.OpenJCEPlus, TestProvider.BC));
+    }
 
     /**
      * Generates combinations of all key sizes and OpenJCEPlus* providers under test.
@@ -127,7 +137,7 @@ public class TestArguments {
         }
 
         return arguments.stream();
-    }    
+    }
 
     /**
      * Returns only the OpenJCEPlus provider (non-FIPS).
