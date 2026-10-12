@@ -448,5 +448,12 @@ final class DHPrivateKey extends PKCS8Key implements javax.crypto.interfaces.DHP
         return false;
     }
 
+    @Override
+    public void clear(){
+        if ( this.encodedKey != null ) {
+            Arrays.fill(this.encodedKey, (byte) 0x00);
+        }
+        Arrays.fill(this.key, (byte) 0x00);
+    }
 
 }
